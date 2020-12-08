@@ -123,7 +123,7 @@ const displayMovements = function (movements, sort = false) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = ` <div class="movements__row">
     <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
-    <div class="movements__value">${mov.toFixed(2)}€</div>
+    <div class="movements__value">${mov.toFixed(2)} ₹</div>
   </div>`;
     containerMovements.insertAdjacentHTML('afterbegin', html); //see line 48
     //afterbegin adds elements in the tab that contains movement before already present elements
@@ -144,12 +144,12 @@ const calcDisplaySummary = function (account) {
   const deposits = account.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${deposits.toFixed(2)}€`;
+  labelSumIn.textContent = `${deposits.toFixed(2)} ₹`;
 
   const out = account.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
+  labelSumOut.textContent = `${Math.abs(out).toFixed(2)} ₹`;
   //the bank gives an interest of 1% on every transaction if that interest is greater than 1 euro
 
   const interests = account.movements
@@ -157,12 +157,12 @@ const calcDisplaySummary = function (account) {
     .map(mov => (mov * account.interestRate) / 100)
     .filter(mov => mov >= 1)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumInterest.textContent = `${interests.toFixed(2)}€`;
+  labelSumInterest.textContent = `${interests.toFixed(2)} ₹`;
 };
 
 const calcDisplayBalance = function (account) {
   account.balance = account.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${account.balance.toFixed(2)}€`;
+  labelBalance.textContent = `${account.balance.toFixed(2)} ₹`;
 };
 
 const displayUI = function (account) {
@@ -239,6 +239,8 @@ btnClose.addEventListener('click', function (e) {
     document.querySelector('.app').style.opacity = 0;
   }
   inputCloseUsername.value = inputClosePin.value = '';
+  labelWelcome.textContent = 'Log in to get started';
+  document.querySelector('.instructions').style.opacity = 1;
 });
 
 btnLoan.addEventListener('click', function (e) {
@@ -354,7 +356,7 @@ GOOD LUCK 😀
 // labelBalance.addEventListener('click', function () {
 //   const movementsUI = Array.from(
 //     document.querySelectorAll('.movements__value'),
-//     mov => Number(mov.textContent.replace('€', ''))
+//     mov => Number(mov.textContent.replace(' ₹', ''))
 //   );
 //   console.log(movementsUI);
 // });
